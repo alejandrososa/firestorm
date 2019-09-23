@@ -21,12 +21,12 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "Firestorm\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "Firestorm\\Tests\\": "tests/"
         }
     },
     "replace": {
