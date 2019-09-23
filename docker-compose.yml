@@ -17,6 +17,8 @@ services:
     ports:
       - "9000:9001"
     tty: true
+    links:
+      - redis
     volumes:
       - .:/var/www:cached
       - ./var/log:/var/www/var/log:cached
