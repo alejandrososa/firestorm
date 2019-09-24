@@ -32,7 +32,22 @@ RUN apk add --update --no-cache \
     php7-zip \
     php7-xmlwriter \
     make \
-    curl
+    curl \
+    git \
+    icu-dev \
+    libxml2-dev \
+    libzip-dev \
+    g++ \
+    autoconf
+
+RUN apk update \
+    && apk add  --no-cache \
+    && docker-php-source extract \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug \
+    && docker-php-source delete \
+    && docker-php-ext-install soap intl zip \
+    && rm -rf /tmp/*
 
 RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-setup.php.sig \
         && curl -sS https://getcomposer.org/installer | tee composer-setup.php | sha384sum -c composer-setup.php.sig \
@@ -42,10 +57,11 @@ RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-set
 COPY default.ini /etc/php7/conf.d/
 COPY default.ini /etc/php7/cli/conf.d/
 COPY xdebug.ini  /etc/php7/conf.d/
-
 COPY default.pool.conf /etc/php7/php-fpm.d/
 
-CMD ["php-fpm7", "-F"]
 
 WORKDIR /var/www
-EXPOSE 9001
+
+EXPOSE 9000
+
+CMD ["php-fpm7", "-F"]

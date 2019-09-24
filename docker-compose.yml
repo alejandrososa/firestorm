@@ -3,7 +3,6 @@ version: '3.7'
 services:
 
   redis:
-    container_name: "firestorm_redis"
     build:
       context: ./docker/redis
     volumes:
@@ -11,14 +10,12 @@ services:
     ports:
       - "6379:6379"
 
-  firestorm:
-    container_name: "firestorm_php"
+  php:
     build: ./docker/php
     ports:
-      - "9000:9001"
+      - "9001:9001"
     tty: true
-    links:
-      - redis
+    restart: on-failure
     volumes:
       - .:/var/www:cached
       - ./var/log:/var/www/var/log:cached
@@ -26,16 +23,19 @@ services:
       - "docker-host.local:127.0.0.1"
 
   nginx:
-    container_name: "firestorm_nginx"
     build: ./docker/nginx
     ports:
       - "8081:80"
     tty: true
-    links:
-      - firestorm
+    restart: on-failure
+    depends_on:
+      - php
+      - redis
     volumes:
       - ./var/log/nginx:/var/log/nginx:cached
       - .:/var/www:cached
+    extra_hosts:
+      - "firestorm.local:127.0.0.1"
 
 networks:
   backend:

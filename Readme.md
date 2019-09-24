@@ -17,7 +17,7 @@ Docker symfony gives you everything you need for developing Symfony application.
 
     ```bash
     # UNIX only: get containers IP address and update host (replace IP according to your configuration) (on Windows, edit C:\Windows\System32\drivers\etc\hosts)
-    $ sudo echo $(docker network inspect bridge | grep Gateway | grep -o -E '[0-9\.]+') "firestorm.local" >> /etc/hosts
+    $ sudo echo "127.0.0.1 firestorm.local" >> /etc/hosts
     ```
 
     **Note:** For **OS X**, please take a look [here](https://docs.docker.com/docker-for-mac/networking/) and for **Windows** read [this](https://docs.docker.com/docker-for-windows/#/step-4-explore-the-application-and-run-examples) (4th step).
@@ -28,7 +28,7 @@ Docker symfony gives you everything you need for developing Symfony application.
     2. Composer install
 
         ```bash
-        $ docker-compose exec firestorm composer install
+        $ docker-compose exec php composer install
         ```
 
 5. Enjoy :-)
@@ -55,12 +55,11 @@ This results in the following running containers:
 ```bash
 $ docker-compose ps 
 
-     Name                    Command               State                Ports              
--------------------------------------------------------------------------------------------
-firestorm_nginx   nginx                            Up      443/tcp, 0.0.0.0:8081->80/tcp   
-firestorm_php     docker-php-entrypoint php- ...   Up      9000/tcp, 0.0.0.0:9000->9001/tcp
-firestorm_redis   docker-entrypoint.sh redis ...   Up      0.0.0.0:6379->6379/tcp 
-
+      Name                     Command               State                Ports              
+---------------------------------------------------------------------------------------------
+firestorm_nginx_1   nginx                            Up      443/tcp, 0.0.0.0:8081->80/tcp   
+firestorm_php_1     docker-php-entrypoint php- ...   Up      9000/tcp, 0.0.0.0:9001->9001/tcp
+firestorm_redis_1   docker-entrypoint.sh redis ...   Up      0.0.0.0:6379->6379/tcp  
 
 ```
 
@@ -68,19 +67,18 @@ firestorm_redis   docker-entrypoint.sh redis ...   Up      0.0.0.0:6379->6379/tc
 
 ```bash
 # bash commands
-$ docker-compose exec firestorm sh
+$ docker-compose exec php sh
 
 # Composer (e.g. composer update)
-$ docker-compose exec firestorm composer update
+$ docker-compose exec php composer update
 
 # Symfony commands
-$ docker-compose exec firestorm /var/www/bin/console cache:clear # Symfony4
-$ docker-compose exec firestorm sh
+$ docker-compose exec php /var/www/bin/console cache:clear 
+$ docker-compose exec php sh
 $ php bin/console cache:clear
 
 # Retrieve an IP Address (here for the nginx container)
-$ docker inspect --format '{{ .NetworkSettings.Networks.dockersymfony_default.IPAddress }}' $(docker ps -f name=nginx -q)
-$ docker inspect $(docker ps -f name=firestorm -q) | grep IPAddress
+$ docker inspect $(docker ps -f name=nginx -q) | grep IPAddress
 
 # F***ing cache/logs folder
 $ sudo chmod -R 777 var/cache var/log var/sessions 
