@@ -3,7 +3,6 @@
 namespace Firestorm\Tests\MonCalamari\Domain\Model\Missile;
 
 use Firestorm\MonCalamari\Domain\Model\Missile\MissileArea;
-use Firestorm\MonCalamari\Domain\Model\Missile\MissileId;
 
 final class MissileAreaMother
 {

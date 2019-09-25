@@ -7,10 +7,15 @@ use Firestorm\Tests\MonCalamari\MissileUnitTestCase;
 
 class MissileAreaTest extends MissileUnitTestCase
 {
-    public function test_throw_an_error_if_the_value_is_higher()
+	protected function tearDown()
+	{
+		parent::tearDown();
+	}
+
+	public function test_throw_an_error_if_the_value_is_higher()
     {
         $this->expectException(\DomainException::class);
-        $n = $this->fake()->numberBetween(MissileArea::MAX_ACCURACY, (MissileArea::MAX_ACCURACY + 1));
+        $n = $this->fake()->numberBetween(MissileArea::MAX_ACCURACY + 1, (MissileArea::MAX_ACCURACY + 5));
         MissileArea::fromInt($n);
     }
 

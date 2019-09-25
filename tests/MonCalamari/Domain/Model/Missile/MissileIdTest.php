@@ -9,6 +9,11 @@ use Ramsey\Uuid\Exception\InvalidUuidStringException;
 
 class MissileIdTest extends MissileUnitTestCase
 {
+	protected function tearDown()
+	{
+		parent::tearDown();
+	}
+
     public function test_throw_an_error_if_the_uuid_is_invalid()
     {
     	$this->expectException(InvalidUuidStringException::class);

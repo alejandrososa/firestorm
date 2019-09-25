@@ -17,6 +17,11 @@ class ProtonTorpedoMissileTest extends MissileUnitTestCase
 	{
 		$this->missile = $this->getMissile();
 	}
+	protected function tearDown()
+	{
+		parent::tearDown();
+		$this->missile;
+	}
 
 	private function getMissile()
 	{
