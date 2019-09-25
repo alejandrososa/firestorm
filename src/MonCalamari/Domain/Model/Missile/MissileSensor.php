@@ -52,9 +52,4 @@ final class MissileSensor
         return $this->humidity() === $other->humidity() &&
             $this->wind() === $other->wind();
     }
-
-    public static function fromMissileWeather(MissileSensor $weather)
-    {
-        return new self($weather->wind(), $weather->humidity());
-    }
 }
