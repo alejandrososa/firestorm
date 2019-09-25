@@ -9,6 +9,8 @@ services:
       - .:/var/www
     ports:
       - "6379:6379"
+    networks:
+      - backend
 
   php:
     build: ./docker/php
@@ -21,13 +23,15 @@ services:
       - ./var/log:/var/www/var/log:cached
     extra_hosts:
       - "docker-host.local:127.0.0.1"
+    networks:
+      - backend
 
   nginx:
     build: ./docker/nginx
     ports:
       - "8081:80"
     tty: true
-    restart: on-failure
+    restart: always
     depends_on:
       - php
       - redis
@@ -36,6 +40,8 @@ services:
       - .:/var/www:cached
     extra_hosts:
       - "firestorm.local:127.0.0.1"
+    networks:
+      - backend
 
 networks:
   backend:
