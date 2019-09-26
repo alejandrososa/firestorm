@@ -3,11 +3,14 @@
 namespace Firestorm\Tests\MonCalamari\Application\Transformer;
 
 use Firestorm\MonCalamari\Application\Transformer\MissileArrayTransformer;
+use Firestorm\MonCalamari\Application\Transformer\TransformableInterface;
 use Firestorm\Tests\MonCalamari\Domain\Model\Missile\MissileMother;
-use PHPUnit\Framework\TestCase;
+use Firestorm\Tests\Shared\UnitTestCase;
+use stdClass;
 
-class MissileArrayTransformerTest extends TestCase
+class MissileArrayTransformerTest extends UnitTestCase
 {
+    /** @var TransformableInterface  */
 	private $transformer;
 
 	protected function setUp()
@@ -30,7 +33,7 @@ class MissileArrayTransformerTest extends TestCase
 
 		return [
 			'array type' => [array('valueOne','valueOne'), []],
-			'stdClass object' => [new \stdClass(), []],
+			'stdClass object' => [new stdClass(), []],
 			'missile object' => [$missile, $expectedDataMissile]
 		];
 	}

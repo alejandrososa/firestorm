@@ -2,6 +2,8 @@
 
 namespace Firestorm\Tests\Shared;
 
+use ArrayIterator;
+use Faker\Factory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Prooph\EventSourcing\Aggregate\AggregateType;
@@ -14,6 +16,14 @@ abstract class UnitTestCase extends TestCase
      * @var AggregateTranslator
      */
     private $aggregateTranslator;
+
+    protected $fake;
+
+    /** @return \Faker\Generator */
+    protected function fake()
+    {
+        return $this->fake = $this->fake ?: Factory::create();
+    }
 
     protected function mock($className): MockObject
     {
@@ -29,7 +39,7 @@ abstract class UnitTestCase extends TestCase
     {
         return $this->getAggregateTranslator()->reconstituteAggregateFromHistory(
             AggregateType::fromAggregateRootClass($aggregateRootClass),
-            new \ArrayIterator($events)
+            new ArrayIterator($events)
         );
     }
 

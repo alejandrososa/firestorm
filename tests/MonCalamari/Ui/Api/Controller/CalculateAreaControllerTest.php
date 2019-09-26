@@ -3,10 +3,10 @@
 namespace Firestorm\Tests\MonCalamari\Ui\Api\Controller;
 
 use Firestorm\MonCalamari\Infrastructure\Persistence\RedisMissileRepository;
-use Firestorm\Tests\MonCalamari\ApiUnitTestCase;
 use Firestorm\Tests\MonCalamari\Domain\Model\Missile\MissileMother;
+use Firestorm\Tests\Shared\FunctionalTestCase;
 
-class CalculateAreaControllerTest extends ApiUnitTestCase
+class CalculateAreaControllerTest extends FunctionalTestCase
 {
 	private $uuid;
 	private $precision;
@@ -15,13 +15,13 @@ class CalculateAreaControllerTest extends ApiUnitTestCase
 	{
 		parent::setUp();
 
-		$this->uuid = 'uuid:e856c897-bd9e-4c2d-815a-220bd56605fa';
+		$this->uuid = $this->fake()->uuid;
 		$this->precision = 500;
 	}
 
 	protected function tearDown(): void
 	{
-		parent::setUp();
+		parent::tearDown();
 
 		$this->uuid = null;
 		$this->precision = null;

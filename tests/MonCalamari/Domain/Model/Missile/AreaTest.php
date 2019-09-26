@@ -2,10 +2,11 @@
 
 namespace Firestorm\Tests\MonCalamari\Domain\Model\Missile;
 
+use DomainException;
 use Firestorm\MonCalamari\Domain\Model\Missile\MissileArea;
-use Firestorm\Tests\MonCalamari\MissileUnitTestCase;
+use Firestorm\Tests\Shared\UnitTestCase;
 
-class MissileAreaTest extends MissileUnitTestCase
+class AreaTest extends UnitTestCase
 {
 	protected function tearDown()
 	{
@@ -14,14 +15,14 @@ class MissileAreaTest extends MissileUnitTestCase
 
 	public function test_throw_an_error_if_the_value_is_higher()
     {
-        $this->expectException(\DomainException::class);
+        $this->expectException(DomainException::class);
         $n = $this->fake()->numberBetween(MissileArea::MAX_ACCURACY + 1, (MissileArea::MAX_ACCURACY + 5));
         MissileArea::fromInt($n);
     }
 
     public function test_throw_an_error_if_the_value_is_less()
     {
-        $this->expectException(\DomainException::class);
+        $this->expectException(DomainException::class);
         $n = $this->fake()->numberBetween(0, (MissileArea::MIN_ACCURACY - 1));
         MissileArea::fromInt($n);
     }

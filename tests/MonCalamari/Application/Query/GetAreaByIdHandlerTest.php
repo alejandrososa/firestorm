@@ -6,9 +6,9 @@ use Firestorm\MonCalamari\Application\Exception\AreaNotFound;
 use Firestorm\MonCalamari\Application\Query\GetAreaById;
 use Firestorm\MonCalamari\Application\Query\GetAreaByIdHandler;
 use Firestorm\Tests\MonCalamari\Domain\Model\Missile\MissileMother;
-use Firestorm\Tests\MonCalamari\MissileUnitTestCase;
+use Firestorm\Tests\Shared\IntegrationTestCase;
 
-class GetAreaByIdHandlerTest extends MissileUnitTestCase
+class GetAreaByIdHandlerTest extends IntegrationTestCase
 {
 	private $handler;
 

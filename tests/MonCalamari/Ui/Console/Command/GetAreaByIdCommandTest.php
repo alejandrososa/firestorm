@@ -2,15 +2,14 @@
 
 namespace Firestorm\Tests\MonCalamari\Ui\Console\Command;
 
-use Firestorm\MonCalamari\Domain\Model\Missile\MissileArea;
 use Firestorm\MonCalamari\Infrastructure\Persistence\RedisMissileRepository;
-use Firestorm\MonCalamari\Ui\Console\Command\CalculateAreaCommand;
+use Firestorm\MonCalamari\Ui\Console\Command\GetAreaByIdCommand;
 use Firestorm\Tests\MonCalamari\Domain\Model\Missile\MissileMother;
 use Firestorm\Tests\Shared\FunctionalTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CalculateAreaCommandTest extends FunctionalTestCase
+class GetAreaByIdCommandTest extends FunctionalTestCase
 {
     private $commandTester;
     private $uuid;
@@ -32,45 +31,45 @@ class CalculateAreaCommandTest extends FunctionalTestCase
     protected function getCommand(): ?Command
 	{
 		$this->app->add(
-		    new CalculateAreaCommand(static::$container->get('messenger.bus.default'))
+		    new GetAreaByIdCommand(static::$container->get('messenger.bus.default'))
         );
-		return $this->app->find('firestorm:calculate-area');
+		return $this->app->find('firestorm:get-area-by-id');
 	}
 
 	public function test_validate_exists_command()
 	{
 		$command = $this->getCommand();
-		$this->assertInstanceOf(CalculateAreaCommand::class, $command);
+		$this->assertInstanceOf(GetAreaByIdCommand::class, $command);
 	}
 
     public function test_execute_command_error()
     {
-        $this->shouldGetMissileById($this->uuid, MissileMother::randomWithId($this->uuid));
+        $this->shouldGetMissileById($this->uuid, null);
         $this->client->getContainer()->set(RedisMissileRepository::class, $this->repository());
 
         $this->commandTester->execute([
             'command' => $this->getCommand()->getName(),
-            'uuid' => $this->uuid,
-            'precision' => MissileArea::MIN_ACCURACY
+            'uuid' => $this->uuid
         ]);
         $output = $this->commandTester->getDisplay();
 
         $this->assertContains('Error!', $output);
-        $this->assertContains(sprintf('Upss, area with uuid \'%s\' already exists', $this->uuid), $output);
+        $this->assertContains(sprintf('Upss, area with uuid \'%s\' not found', $this->uuid), $output);
     }
 
 	public function test_execute_command_success()
 	{
-        $this->shouldSaveMissile();
+        $this->shouldGetMissileById($this->uuid, MissileMother::randomWithId($this->uuid));
         $this->client->getContainer()->set(RedisMissileRepository::class, $this->repository());
 
 		$this->commandTester->execute([
 			'command' => $this->getCommand()->getName(),
-            'uuid' => $this->uuid,
-            'precision' => MissileArea::MIN_ACCURACY
+            'uuid' => $this->uuid
 		]);
 		$output = $this->commandTester->getDisplay();
 
-		$this->assertContains('[OK] Success', $output);
+		$this->assertContains('response', $output);
+		$this->assertContains('area', $output);
+		$this->assertContains('weather', $output);
 	}
 }

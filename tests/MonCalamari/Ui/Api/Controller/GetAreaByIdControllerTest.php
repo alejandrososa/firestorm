@@ -3,10 +3,10 @@
 namespace Firestorm\Tests\MonCalamari\Ui\Api\Controller;
 
 use Firestorm\MonCalamari\Infrastructure\Persistence\RedisMissileRepository;
-use Firestorm\Tests\MonCalamari\ApiUnitTestCase;
 use Firestorm\Tests\MonCalamari\Domain\Model\Missile\MissileMother;
+use Firestorm\Tests\Shared\FunctionalTestCase;
 
-class GetAreaByIdControllerTest extends ApiUnitTestCase
+class GetAreaByIdControllerTest extends FunctionalTestCase
 {
 	private $uuid;
 	private $uri;
@@ -21,10 +21,10 @@ class GetAreaByIdControllerTest extends ApiUnitTestCase
 
 	protected function tearDown(): void
 	{
-		parent::setUp();
+		parent::tearDown();
 
 		$this->uuid = null;
-		$this->client->getContainer()->set(RedisMissileRepository::class, $this->repository);
+		$this->uri = null;
 	}
 
 	public function test_must_throw_error_if_area_calculate_with_uuid_not_found()

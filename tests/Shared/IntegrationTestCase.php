@@ -1,13 +1,13 @@
 <?php
-namespace Firestorm\Tests\MonCalamari;
+namespace Firestorm\Tests\Shared;
 
 use Faker\Factory;
 use Firestorm\MonCalamari\Domain\Model\Missile\MissileRepository;
 use Firestorm\Tests\MonCalamari\Domain\Model\Missile\MissileIdMother;
-use Firestorm\Tests\Shared\UnitTestCase;
+use Firestorm\Tests\Shared\UnitTestCase as BaseUnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-abstract class MissileUnitTestCase extends UnitTestCase
+abstract class IntegrationTestCase extends BaseUnitTestCase
 {
     protected $fake;
 	protected $repository;

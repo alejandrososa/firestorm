@@ -6,9 +6,9 @@ use Firestorm\MonCalamari\Application\Command\CalculateArea;
 use Firestorm\MonCalamari\Application\Command\CalculateAreaHandler;
 use Firestorm\MonCalamari\Application\Exception\CalculatedAreaAlreadyExists;
 use Firestorm\Tests\MonCalamari\Domain\Model\Missile\MissileMother;
-use Firestorm\Tests\MonCalamari\MissileUnitTestCase;
+use Firestorm\Tests\Shared\IntegrationTestCase;
 
-class CalculateAreaHandlerTest extends MissileUnitTestCase
+class CalculateAreaHandlerTest extends IntegrationTestCase
 {
 	private $handler;
 
