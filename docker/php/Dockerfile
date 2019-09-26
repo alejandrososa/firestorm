@@ -44,9 +44,11 @@ RUN apk update \
     && apk add  --no-cache \
     && docker-php-source extract \
     && pecl install xdebug \
+    && pecl install redis \
     && docker-php-ext-enable xdebug \
     && docker-php-source delete \
     && docker-php-ext-install soap intl zip \
+    && docker-php-ext-enable redis \
     && rm -rf /tmp/*
 
 RUN echo "$(curl -sS https://composer.github.io/installer.sig) -" > composer-setup.php.sig \
