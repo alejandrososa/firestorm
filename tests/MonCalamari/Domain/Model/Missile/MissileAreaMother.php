@@ -6,13 +6,13 @@ use Firestorm\MonCalamari\Domain\Model\Missile\MissileArea;
 
 final class MissileAreaMother
 {
-	public static function create(int $presision): MissileArea
+	public static function create(int $precision): MissileArea
 	{
-		return MissileArea::fromInt($presision);
+		return MissileArea::fromInt($precision);
 	}
 
 	public static function random(): MissileArea
 	{
-		return self::create(random_int(MissileArea::MIN_ACCURACY, MissileArea::MAX_ACCURACY));
+		return self::create(mt_rand(MissileArea::MIN_ACCURACY, MissileArea::MAX_ACCURACY));
 	}
 }

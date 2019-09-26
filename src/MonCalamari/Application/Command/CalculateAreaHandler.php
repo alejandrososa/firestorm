@@ -5,6 +5,7 @@ namespace Firestorm\MonCalamari\Application\Command;
 use Assert\Assertion;
 use Assert\AssertionFailedException;
 use Firestorm\MonCalamari\Application\Exception\CalculatedAreaAlreadyExists;
+use Firestorm\MonCalamari\Domain\Model\Missile\MissileArea;
 use Firestorm\MonCalamari\Domain\Model\Missile\MissileId;
 use Firestorm\MonCalamari\Domain\Model\Missile\MissileRepository;
 use Firestorm\MonCalamari\Domain\Model\Missile\ProtonTorpedoMissile;
@@ -31,13 +32,20 @@ class CalculateAreaHandler implements MessageHandlerInterface
 		$missile = $this->repository->get(MissileId::fromString($command->id()));
 
 		$this->guardCalculateAreaAlreadyExist($command, $missile);
+
+		$missile = ProtonTorpedoMissile::configureAttackArea(
+		    MissileId::fromString($command->id()),
+		    MissileArea::fromInt($command->precision()) 
+        );
+		$this->repository->save($missile);
 	}
 
-	protected function guardCalculateAreaAlreadyExist(CalculateArea $command, ?ProtonTorpedoMissile $missile = null): void
-	{
+	protected function guardCalculateAreaAlreadyExist(
+	    CalculateArea $command,
+        ?ProtonTorpedoMissile $missile = null
+    ): void {
 		try {
-			Assertion::isInstanceOf($missile, ProtonTorpedoMissile::class);
-			Assertion::eq($missile->id(), $command->id());
+			Assertion::notIsInstanceOf($missile, ProtonTorpedoMissile::class);
 		} catch (AssertionFailedException $e) {
 			throw new CalculatedAreaAlreadyExists($command->id());
 		}

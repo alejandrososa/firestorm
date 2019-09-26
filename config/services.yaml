@@ -4,6 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    redis.host: '%env(APP_REDIS_HOST)%'
+    redis.port: '%env(APP_REDIS_PORT)%'
 
 services:
     # default configuration for services in *this* file
@@ -25,3 +27,20 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+
+    Firestorm\MonCalamari\Infrastructure\Serializer\SerializerFactory:
+        public: true
+
+    Firestorm\MonCalamari\Infrastructure\Persistence\RedisMissileRepository:
+        arguments:
+            - '@cache.app'
+            - '@serializer'
+        public: true
+
+    Firestorm\MonCalamari\Application\Command\CalculateAreaHandler:
+        arguments:
+            - '@Firestorm\MonCalamari\Infrastructure\Persistence\RedisMissileRepository'
+        public: true
+        tags:
+            - { name: 'prooph_service_bus.common_command_bus.route_target', message_detection: true }

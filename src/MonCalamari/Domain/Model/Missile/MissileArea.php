@@ -12,17 +12,19 @@ final class MissileArea implements ValueObject
     const MAX_ACCURACY = 15000;
 
     private $area;
+    private $precision;
 
-    private function __construct(int $area)
+    private function __construct(int $precision)
     {
-        $this->guard($area);
-        $this->area = $this->approximate($area);
+        $this->guard($precision);
+        $this->precision = $precision;
+        $this->area = $this->approximate($precision);
     }
 
-    private function guard(string $value): void
+    private function guard(int $value): void
     {
         try {
-			Assertion::notEmpty($value, 'precision is empty');
+            Assertion::notEmpty($value, 'precision is empty');
 			Assertion::false($value > self::MAX_ACCURACY, 'precision greater than allowed');
 			Assertion::false($value < self::MIN_ACCURACY, 'precision less than allowed');
         } catch (AssertionFailedException $e) {
@@ -35,14 +37,19 @@ final class MissileArea implements ValueObject
 		return rand(self::MIN_ACCURACY, $arg) / self::MAX_ACCURACY;
 	}
 
-    public static function fromInt(int $area): self
+    public static function fromInt(int $precision): self
     {
-        return new self($area);
+        return new self($precision);
     }
 
     public function toFloat(): float
     {
         return $this->area;
+    }
+
+    public function toInt(): float
+    {
+        return $this->precision;
     }
 
     public function equals(ValueObject $object): bool

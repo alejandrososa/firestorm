@@ -1,14 +1,9 @@
 <?php
-/**
- * web, Created by PhpStorm.
- * @author: Alejandro Sosa <alesjohnson@hotmail.com>
- * @copyright Copyright (c) 2019, 10/04/2019 15:56
- */
-
 namespace Firestorm\Tests\MonCalamari;
 
 use Faker\Factory;
 use Firestorm\MonCalamari\Domain\Model\Missile\MissileRepository;
+use Firestorm\Tests\MonCalamari\Domain\Model\Missile\MissileIdMother;
 use Firestorm\Tests\Shared\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -40,6 +35,15 @@ abstract class MissileUnitTestCase extends UnitTestCase
 		$this->repository()
 			->expects($this->atLeastOnce())
 			->method('get')
+            ->with($this->equalTo(MissileIdMother::create($id)))
 			->willReturn($object);
 	}
+
+    protected function shouldSaveMissileWithAreaCalculated(): void
+    {
+        $this->repository()
+            ->expects($this->once())
+            ->method('save')
+            ->willReturn(null);
+    }
 }

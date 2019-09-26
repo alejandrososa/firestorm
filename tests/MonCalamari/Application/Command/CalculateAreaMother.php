@@ -12,7 +12,7 @@ final class CalculateAreaMother
 {
 	public static function create(MissileId $id, MissileArea $area): CalculateArea
 	{
-		return new CalculateArea($id->toString(), $area->toFloat());
+		return new CalculateArea($id->toString(), $area->toInt());
 	}
 
 	public static function random(): CalculateArea

@@ -31,8 +31,8 @@ class ProtonTorpedoMissileTest extends MissileUnitTestCase
 	public function provider_inherits_and_implements_class_report()
 	{
 		return [
-			[AggregateRoot::class],
-			[Model::class]
+			'AggregateRoot' => [AggregateRoot::class],
+			'Model' => [Model::class]
 		];
 	}
 
