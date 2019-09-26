@@ -15,11 +15,6 @@ final class MissileId implements ValueObject
         $this->uuid = $uuid;
     }
 
-    public static function generate(): self
-    {
-        return new self(Uuid::uuid4());
-    }
-
     public static function fromString(string $adId): self
     {
         return new self(Uuid::fromString($adId));

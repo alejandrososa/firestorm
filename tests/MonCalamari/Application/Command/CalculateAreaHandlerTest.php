@@ -5,6 +5,7 @@ namespace Firestorm\Tests\MonCalamari\Application\Command;
 use Firestorm\MonCalamari\Application\Command\CalculateArea;
 use Firestorm\MonCalamari\Application\Command\CalculateAreaHandler;
 use Firestorm\MonCalamari\Application\Exception\CalculatedAreaAlreadyExists;
+use Firestorm\Tests\MonCalamari\Domain\Model\Missile\MissileMother;
 use Firestorm\Tests\MonCalamari\MissileUnitTestCase;
 
 class CalculateAreaHandlerTest extends MissileUnitTestCase

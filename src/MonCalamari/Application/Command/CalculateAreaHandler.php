@@ -25,6 +25,7 @@ class CalculateAreaHandler implements MessageHandlerInterface
 
 	/**
 	 * @param CalculateArea $command
+	 * @return string
 	 * @throws CalculatedAreaAlreadyExists
 	 */
 	public function __invoke(CalculateArea $command)
@@ -47,7 +48,7 @@ class CalculateAreaHandler implements MessageHandlerInterface
 		try {
 			Assertion::notIsInstanceOf($missile, ProtonTorpedoMissile::class);
 		} catch (AssertionFailedException $e) {
-			throw new CalculatedAreaAlreadyExists($command->id());
+			throw CalculatedAreaAlreadyExists::reason($command->id());
 		}
 	}
 }

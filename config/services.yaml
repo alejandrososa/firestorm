@@ -21,26 +21,21 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-#    Firestorm\Controller\:
-#        resource: '../src/Controller'
-#        tags: ['controller.service_arguments']
+    Firestorm\MonCalamari\Ui\Api\Controller\:
+        resource: '../src/MonCalamari/Ui/Api/Controller'
+        tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-
-    Firestorm\MonCalamari\Infrastructure\Serializer\SerializerFactory:
-        public: true
-
     Firestorm\MonCalamari\Infrastructure\Persistence\RedisMissileRepository:
         arguments:
             - '@cache.app'
-            - '@serializer'
         public: true
+        autowire: true
 
-    Firestorm\MonCalamari\Application\Command\CalculateAreaHandler:
-        arguments:
-            - '@Firestorm\MonCalamari\Infrastructure\Persistence\RedisMissileRepository'
+    Firestorm\MonCalamari\Infrastructure\Persistence\MemoryMissileRepository:
         public: true
-        tags:
-            - { name: 'prooph_service_bus.common_command_bus.route_target', message_detection: true }
+        autowire: true
+
+    Firestorm\MonCalamari\Domain\Model\Missile\MissileRepository: '@Firestorm\MonCalamari\Infrastructure\Persistence\RedisMissileRepository'
