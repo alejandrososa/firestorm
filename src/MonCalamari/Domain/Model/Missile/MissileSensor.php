@@ -2,11 +2,9 @@
 
 namespace Firestorm\MonCalamari\Domain\Model\Missile;
 
-use Assert\Assertion;
-use Assert\AssertionFailedException;
 use Firestorm\MonCalamari\Domain\Model\ValueObject;
 
-final class MissileSensor
+final class MissileSensor implements ValueObject
 {
     protected $wind;
 
@@ -36,8 +34,8 @@ final class MissileSensor
     public function toArray(): array
     {
         return [
-            'wind' => $this->wind(),
-            'humidity' => $this->humidity()
+            'wind' => $this->wind() ?? null,
+            'humidity' => $this->humidity() ?? null
         ];
     }
 

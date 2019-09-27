@@ -3,6 +3,7 @@
 namespace Firestorm\Tests\MonCalamari\Domain\Model\Missile;
 
 use Firestorm\MonCalamari\Domain\Events\MissileWasConfiguredWithAttackArea;
+use Firestorm\MonCalamari\Domain\Events\MissileWasUpdatedWithWeather;
 use Firestorm\MonCalamari\Domain\Model\AggregateRoot;
 use Firestorm\MonCalamari\Domain\Model\Missile\MissileId;
 use Firestorm\MonCalamari\Domain\Model\Missile\ProtonTorpedoMissile;
@@ -56,7 +57,7 @@ class ProtonTorpedoTest extends UnitTestCase
         $this->assertTrue($this->missile->sameIdentityAs($this->missile));
     }
 
-    public function test_validate_that_an_event_is_launched_when_an_ad_is_created()
+    public function test_validate_that_an_event_is_launched_when_an_missile_is_created()
     {
         $missile = ProtonTorpedoMissile::configureAttackArea(
             MissileIdMother::random(),
@@ -73,5 +74,28 @@ class ProtonTorpedoTest extends UnitTestCase
         $this->assertSame(MissileWasConfiguredWithAttackArea::class, $event->messageName());
         $this->assertTrue($missile->id()->equals($event->id()));
         $this->assertTrue($missile->area()->equals($event->area()));
+    }
+
+    public function test_validate_that_an_event_is_launched_when_an_missile_attach_weather_for_sensor()
+    {
+        $missile = MissileMother::random();
+        $missile->attachWeather(MissileSensorMother::random());
+
+        $events = $this->popRecordedEvent($missile);
+
+        $this->assertCount(2, $events);
+
+        /** @var MissileWasConfiguredWithAttackArea $eventOne */
+        /** @var MissileWasUpdatedWithWeather $eventTwo */
+        $eventOne = $events[0];
+        $eventTwo = $events[1];
+
+        $this->assertSame(MissileWasConfiguredWithAttackArea::class, $eventOne->messageName());
+        $this->assertTrue($missile->id()->equals($eventOne->id()));
+        $this->assertTrue($missile->area()->equals($eventOne->area()));
+
+        $this->assertSame(MissileWasUpdatedWithWeather::class, $eventTwo->messageName());
+        $this->assertTrue($missile->id()->equals($eventTwo->id()));
+        $this->assertTrue($missile->sensor()->equals($eventTwo->sensor()));
     }
 }

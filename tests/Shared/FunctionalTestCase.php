@@ -8,6 +8,9 @@ use Firestorm\Tests\MonCalamari\Domain\Model\Missile\MissileIdMother;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DispatchAfterCurrentBusStamp;
 
 abstract class FunctionalTestCase extends WebTestCase
 {
@@ -19,10 +22,10 @@ abstract class FunctionalTestCase extends WebTestCase
     protected $fake;
     /** @var \Symfony\Bundle\FrameworkBundle\KernelBrowser  */
     protected $client;
+	protected $bus;
 
-    protected function setUp()
+	protected function setUp()
     {
-        $this->repository = $this->repository();
         $this->app = new Application();
         $this->client = static::createClient();
     }
@@ -33,6 +36,7 @@ abstract class FunctionalTestCase extends WebTestCase
         $this->repository = null;
         $this->fake = null;
         $this->client = null;
+        $this->bus = null;
     }
 
     /** @return \Faker\Generator */
@@ -56,11 +60,35 @@ abstract class FunctionalTestCase extends WebTestCase
             ->willReturn($object);
     }
 
+    protected function shouldConsecutiveGetMissileById(string $id, ...$objects)
+    {
+		$this->repository()
+			->expects($this->any())
+			->method('get')
+			->with($this->equalTo(MissileIdMother::create($id)))
+			->will($this->onConsecutiveCalls(...$objects));
+    }
+
+	/** @return MessageBusInterface|MockObject */
+	protected function bus()
+	{
+		return $this->bus = $this->bus ?: $this->createMock(MessageBusInterface::class);
+	}
+
     protected function shouldSaveMissile()
     {
         $this->repository()
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('save')
             ->willReturn(null);
     }
+
+	protected function shouldDispatch($message = null)
+	{
+		$this->bus()->expects($this->any())
+			->method('dispatch')
+			->willReturn(
+				(new Envelope($message))->with(new DispatchAfterCurrentBusStamp())
+			);
+	}
 }

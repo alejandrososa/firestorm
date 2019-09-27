@@ -2,7 +2,7 @@
 
 namespace Firestorm\MonCalamari\Ui\Console\Command;
 
-use Firestorm\MonCalamari\Application\Command\CalculateArea;
+use Exception;
 use Firestorm\MonCalamari\Application\Query\GetAreaById;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -51,7 +51,7 @@ class GetAreaByIdCommand extends Command
 			$envelope = $this->bus->dispatch(new GetAreaById($input->getArgument('uuid')));
 			$handledStamp = $envelope->last(HandledStamp::class);
 			$io->text($this->getResponsePretty(['response'=> $handledStamp->getResult()]));
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$output->writeln($formatter->formatBlock(['Error!', $e->getMessage()], 'error'));
 		}
 	}

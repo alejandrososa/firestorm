@@ -3,9 +3,7 @@
 namespace Firestorm\MonCalamari\Infrastructure\Persistence;
 
 use Firestorm\MonCalamari\Domain\Model\Missile\MissileId;
-use Firestorm\MonCalamari\Domain\Model\Missile\MissileRepository;
 use Firestorm\MonCalamari\Domain\Model\Missile\MissileSensor;
-use Firestorm\MonCalamari\Domain\Model\Missile\ProtonTorpedoMissile;
 use Firestorm\MonCalamari\Domain\Model\Missile\SensorRepository;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 

@@ -7,11 +7,20 @@ use Firestorm\MonCalamari\Domain\Model\ValueObject;
 use Firestorm\Tests\Shared\UnitTestCase;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 
-class IdTest extends UnitTestCase
+class MissileIdTest extends UnitTestCase
 {
+	private $uuid;
+
+	protected function setUp()
+	{
+		parent::setUp();
+		$this->uuid = $this->fake()->uuid;
+	}
+
 	protected function tearDown()
 	{
 		parent::tearDown();
+		$this->uuid = null;
 	}
 
     public function test_throw_an_error_if_the_uuid_is_invalid()
@@ -22,10 +31,9 @@ class IdTest extends UnitTestCase
 
     public function test_it_create_uuid_from_string()
     {
-        $uuidFake = $this->fake()->uuid;
-        $uuid = MissileId::fromString($uuidFake);
+        $uuid = MissileId::fromString($this->uuid);
 
-        $this->assertSame($uuidFake, $uuid->toString());
+        $this->assertSame($this->uuid, $uuid->toString());
     }
 
     /**
@@ -33,7 +41,7 @@ class IdTest extends UnitTestCase
      */
     public function test_it_can_be_compared()
     {
-        $uuid = $uuidCloned = $this->fake()->uuid;
+        $uuid = $uuidCloned = $this->uuid;
         $anotherTitle = $this->fake()->uuid;
 
         $first = MissileId::fromString($uuid);
@@ -54,14 +62,13 @@ class IdTest extends UnitTestCase
 	public function test_return_valid_uuid()
 	{
 		$pattern = '/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i';
-		$missileId = MissileId::fromString($this->fake()->uuid);
+		$missileId = MissileId::fromString($this->uuid);
 		$this->assertRegExp($pattern, $missileId->toString());
     }
 
 	public function test_it_can_cast_to_string()
 	{
-	    $uuid = $this->fake()->uuid;
-		$missileId = MissileId::fromString($uuid);
-		$this->assertSame($uuid, (string)$missileId);
+		$missileId = MissileId::fromString($this->uuid);
+		$this->assertSame($this->uuid, (string)$missileId);
     }
 }

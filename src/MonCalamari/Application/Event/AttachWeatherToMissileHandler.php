@@ -49,10 +49,10 @@ class AttachWeatherToMissileHandler implements MessageHandlerInterface
      */
     public function __invoke(AttachWeatherToMissile $event)
     {
-        $missile = $this->missileRepository->get(MissileId::fromString($event->id()));
-        $missile->attachWeather($this->getSensor($event));
-        $this->missileRepository->save($missile);
-    }
+		$missile = $this->missileRepository->get(MissileId::fromString($event->id()));
+		$missile->attachWeather($this->getSensor($event));
+		$this->missileRepository->save($missile);
+	}
 
     private function getSensor(AttachWeatherToMissile $event)
     {
@@ -62,11 +62,11 @@ class AttachWeatherToMissileHandler implements MessageHandlerInterface
 
         try {
             list($humidity, $wind) = $this->getWeatherData();
-        } catch (TransportExceptionInterface $e) {
-        }
-
-        return MissileSensor::with($wind, $humidity);
-    }
+			return MissileSensor::with($wind, $humidity);
+		} catch (TransportExceptionInterface $e) {
+			//TODO next time add logger
+		}
+	}
 
     /**
      * @return array
@@ -80,6 +80,8 @@ class AttachWeatherToMissileHandler implements MessageHandlerInterface
         $uri = $this->params->get('api.url.weather');
         $key = $this->params->get('api.key.weather');
         $response = $this->client->request('GET', sprintf('%s&APPID=%s', $uri, $key));
+
+		$wind = $humidity = '';
 
         if ($response->getStatusCode() === Response::HTTP_OK) {
             $weather = json_decode($response->getContent(), true);

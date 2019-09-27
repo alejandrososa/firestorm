@@ -6,7 +6,7 @@ use DomainException;
 use Firestorm\MonCalamari\Domain\Model\Missile\MissileArea;
 use Firestorm\Tests\Shared\UnitTestCase;
 
-class AreaTest extends UnitTestCase
+class MissileAreaTest extends UnitTestCase
 {
 	protected function tearDown()
 	{

@@ -7,6 +7,7 @@ use Firestorm\MonCalamari\Domain\Model\Missile\SensorRepository;
 use Firestorm\Tests\MonCalamari\Domain\Model\Missile\MissileIdMother;
 use Firestorm\Tests\Shared\UnitTestCase as BaseUnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 abstract class IntegrationTestCase extends BaseUnitTestCase
@@ -63,5 +64,12 @@ abstract class IntegrationTestCase extends BaseUnitTestCase
             ->expects($this->once())
             ->method('save')
             ->willReturn(null);
+    }
+
+	protected function shouldDispatch($message = null)
+	{
+		$this->bus()->expects($this->atLeastOnce())
+			->method('dispatch')
+			->willReturn(new Envelope($message));
     }
 }

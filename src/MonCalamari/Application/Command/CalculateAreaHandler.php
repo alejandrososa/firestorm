@@ -40,7 +40,6 @@ class CalculateAreaHandler implements MessageHandlerInterface
 	public function __invoke(CalculateArea $command)
 	{
 		$missile = $this->repository->get(MissileId::fromString($command->id()));
-
 		$this->guardCalculateAreaAlreadyExist($command, $missile);
 
 		$missile = ProtonTorpedoMissile::configureAttackArea(
@@ -49,8 +48,8 @@ class CalculateAreaHandler implements MessageHandlerInterface
         );
 		$this->repository->save($missile);
 
-        $event = new AttachWeatherToMissile($command->id());
-        $this->bus->dispatch(
+		$event = new AttachWeatherToMissile($command->id());
+		$this->bus->dispatch(
             (new Envelope($event))
                 ->with(new DispatchAfterCurrentBusStamp())
         );
