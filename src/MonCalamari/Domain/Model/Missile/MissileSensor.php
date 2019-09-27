@@ -18,6 +18,11 @@ final class MissileSensor
         $this->humidity = $humidity;
     }
 
+    public static function with(string $wind, string $humidity)
+    {
+        return new self($wind, $humidity);
+    }
+
     public function wind(): string
     {
         return $this->wind;
@@ -26,16 +31,6 @@ final class MissileSensor
     public function humidity(): string
     {
         return $this->humidity;
-    }
-
-    protected static function guard(array $weather): void
-    {
-        try {
-            Assertion::keyExists($weather, 'wind', 'wind is empty');
-            Assertion::keyExists($weather, 'humidity', 'humidity is empty');
-        } catch (AssertionFailedException $e) {
-            throw new \DomainException($e->getMessage());
-        }
     }
 
     public function toArray(): array

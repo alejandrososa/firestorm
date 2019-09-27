@@ -15,7 +15,7 @@ class GetAreaByIdHandlerTest extends IntegrationTestCase
 	protected function setUp()
 	{
 		$this->handler = new GetAreaByIdHandler(
-			$this->repository()
+			$this->missileRepository()
 		);
 	}
 

@@ -6,6 +6,8 @@
 parameters:
     redis.host: '%env(APP_REDIS_HOST)%'
     redis.port: '%env(APP_REDIS_PORT)%'
+    api.url.weather: '%env(API_URL_WEATHER)%'
+    api.key.weather: '%env(API_KEY_WEATHER)%'
 
 services:
     # default configuration for services in *this* file
@@ -29,6 +31,12 @@ services:
     # please note that last definitions always *replace* previous ones
 
     Firestorm\MonCalamari\Infrastructure\Persistence\RedisMissileRepository:
+        arguments:
+            - '@cache.app'
+        public: true
+        autowire: true
+
+    Firestorm\MonCalamari\Infrastructure\Persistence\RedisSensorRepository:
         arguments:
             - '@cache.app'
         public: true

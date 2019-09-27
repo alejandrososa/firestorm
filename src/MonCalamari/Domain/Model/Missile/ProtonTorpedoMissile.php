@@ -3,6 +3,7 @@
 namespace Firestorm\MonCalamari\Domain\Model\Missile;
 
 use Firestorm\MonCalamari\Domain\Events\MissileWasConfiguredWithAttackArea;
+use Firestorm\MonCalamari\Domain\Events\MissileWasUpdatedWithWeather;
 use Firestorm\MonCalamari\Domain\Model\AggregateRoot;
 use Firestorm\MonCalamari\Domain\Model\Model;
 
@@ -60,10 +61,24 @@ class ProtonTorpedoMissile extends AggregateRoot implements Model
         return $self;
     }
 
-    protected function whenMissileWasConfiguredWithAttackArea(
-        MissileWasConfiguredWithAttackArea $event
-    ): void {
+    public function attachWeather(MissileSensor $sensor): self
+    {
+        $this->recordThat(
+            MissileWasUpdatedWithWeather::with($this->id(), $sensor)
+        );
+
+        return $this;
+    }
+
+    protected function whenMissileWasConfiguredWithAttackArea(MissileWasConfiguredWithAttackArea $event): void
+    {
         $this->id = $event->id();
         $this->area = $event->area();
+    }
+
+    protected function whenMissileWasUpdatedWithWeather(MissileWasUpdatedWithWeather $event): void
+    {
+        $this->id = $event->id();
+        $this->sensor = $event->sensor();
     }
 }

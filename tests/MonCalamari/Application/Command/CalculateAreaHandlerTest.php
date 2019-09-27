@@ -15,7 +15,8 @@ class CalculateAreaHandlerTest extends IntegrationTestCase
 	protected function setUp()
 	{
 		$this->handler = new CalculateAreaHandler(
-			$this->repository()
+			$this->missileRepository(),
+            $this->bus()
 		);
 	}
 
